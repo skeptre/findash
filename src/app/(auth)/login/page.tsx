@@ -5,17 +5,27 @@ import { Input } from "@/components/ui/Input";
 import React, { useState } from "react"; // 1. Import useState
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
+import {createClient} from "@/lib/supabase";
 
 export default function LoginPage() {
+    const supabase = createClient();
     const router = useRouter();
     // 2. Create state variables for email and password
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     // 3. Create the function to handle form submission
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // This stops the page from reloading
-        console.log({ email, password });
+        const {data, error} = await supabase.auth.signInWithPassword({email: email, password: password});
+        if (error) {
+            console.error("Error logging in:", error.message);
+            alert(error.message);
+        }
+        else {
+            console.log("Login successful", data);
+            router.push("/");
+        }
     };
 
     return (

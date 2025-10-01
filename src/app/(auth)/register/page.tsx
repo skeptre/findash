@@ -42,8 +42,7 @@ export default function RegisterPage() {
         } else {
             console.log("Signed up successfully!", data);
             alert("Registration successful! Please check your email to confirm your account.");
-            router.push("/");
-            // We can redirect the user later
+            router.push('/login');
         }
     };
 
